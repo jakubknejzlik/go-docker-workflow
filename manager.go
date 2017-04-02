@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/robfig/cron"
 
@@ -41,6 +42,19 @@ func (m *Manager) RunJob(jobName string) error {
 
 	job.Run()
 	return nil
+}
+
+func (m *Manager) Start() error {
+	_, err := m.StartCrons()
+
+	if err != nil {
+		return err
+	}
+
+	log.Println("starting manager")
+	for {
+		time.Sleep(1 * time.Second)
+	}
 }
 
 func (m *Manager) StartCrons() (*cron.Cron, error) {

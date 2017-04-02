@@ -1,12 +1,9 @@
 package main
 
-import (
-	"log"
-	"os"
-)
+import "os"
 
 func main() {
 	man := NewManager(os.Getenv("CONFIG"))
 
-	log.Print(man)
+	man.Start()
 }
