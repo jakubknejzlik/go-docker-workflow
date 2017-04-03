@@ -20,6 +20,10 @@ func NewManager(config string) Manager {
 		log.Fatal(err)
 	}
 
+	for key, job := range conf.Jobs {
+		job.Name = key
+	}
+
 	return Manager{conf}
 }
 
