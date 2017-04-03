@@ -66,5 +66,7 @@ func (m *Manager) StartCrons() (*cron.Cron, error) {
 		}
 	}
 
+	c.Start()
+
 	return c, nil
 }
