@@ -1,5 +1,13 @@
 jobs:
   test:
-    image: hello-world
     environment:
-      - HELLO=world
+      - XXX=yyy
+    jobs:
+      subtest1:
+        image: hello-world
+        environment:
+          - HELLO=world
+      subtest2:
+        image: hello-world
+        environment:
+          - HELLO=world

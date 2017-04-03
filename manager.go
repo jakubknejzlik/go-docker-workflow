@@ -10,6 +10,10 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
+type Config struct {
+	Jobs map[string]*Job `yaml:"jobs"`
+}
+
 type Manager struct {
 	Conf Config
 }
@@ -21,7 +25,7 @@ func NewManager(config string) Manager {
 	}
 
 	for key, job := range conf.Jobs {
-		job.Name = key
+		processJob(job, key)
 	}
 
 	return Manager{conf}
