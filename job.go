@@ -65,7 +65,6 @@ func (j *Job) Run() {
 		}
 		args = append(args, j.Image)
 		cmd := exec.Command("docker", args...)
-		log.Print(cmd)
 
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
