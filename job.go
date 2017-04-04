@@ -55,7 +55,7 @@ func (j *Job) PullImage() error {
 func (j *Job) Run() {
 	j.PullImage()
 
-	log.Printf("Running job %s", j.Name)
+	log.Printf("Running job %s", j.GetFullname())
 
 	if j.Image != "" {
 		args := []string{"run", "--rm"}
