@@ -60,6 +60,13 @@ func (m *Manager) Start() error {
 	}
 
 	log.Println("starting manager")
+
+	for _, job := range m.Conf.Jobs {
+		if job.Cron == "" {
+			job.Run()
+		}
+	}
+
 	for {
 		time.Sleep(1 * time.Second)
 	}
