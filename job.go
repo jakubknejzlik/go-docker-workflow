@@ -8,22 +8,20 @@ import (
 )
 
 type Job struct {
-	Name       string          `yaml:"name"`
-	Image      string          `yaml:"image"`
-	AlwaysPull bool            `yaml:"alwaysPull"`
-	Cron       string          `yaml:"cron"`
-	Steps      []string        `yaml:"steps"`
-	Env        []string        `yaml:"environment"`
-	Jobs       map[string]*Job `yaml:"jobs"`
+	Name       string   `yaml:"name"`
+	Image      string   `yaml:"image"`
+	AlwaysPull bool     `yaml:"alwaysPull"`
+	Cron       string   `yaml:"cron"`
+	Steps      []string `yaml:"steps"`
+	Env        []string `yaml:"environment"`
+	Jobs       []*Job   `yaml:"jobs"`
 	ParentJob  *Job
 }
 
-func processJob(j *Job, name string) {
-	j.Name = name
-	for name, job := range j.Jobs {
+func processJob(j *Job) {
+	for _, job := range j.Jobs {
 		job.ParentJob = j
-		job.Env = append(job.Env, j.Env...)
-		processJob(job, name)
+		processJob(job)
 	}
 }
 
@@ -32,6 +30,13 @@ func (j *Job) GetFullname() string {
 		return fmt.Sprintf("%s/%s", j.ParentJob.GetFullname(), j.Name)
 	}
 	return j.Name
+}
+
+func (j *Job) GetFullEnv() []string {
+	if j.ParentJob != nil {
+		return append(j.ParentJob.GetFullEnv(), j.Env...)
+	}
+	return j.Env
 }
 
 func (j *Job) PullImage() error {

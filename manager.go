@@ -11,7 +11,7 @@ import (
 )
 
 type Config struct {
-	Jobs map[string]*Job `yaml:"jobs"`
+	Jobs []*Job `yaml:"jobs"`
 }
 
 type Manager struct {
@@ -24,15 +24,15 @@ func NewManager(config string) Manager {
 		log.Fatal(err)
 	}
 
-	for key, job := range conf.Jobs {
-		processJob(job, key)
+	for _, job := range conf.Jobs {
+		processJob(job)
 	}
 
 	return Manager{conf}
 }
 
 func (m *Manager) PullJobImage(jobName string) error {
-	job := m.Conf.Jobs[jobName]
+	job := m.GetJob(jobName)
 
 	if job == nil {
 		return fmt.Errorf("job %s not found", jobName)
@@ -41,8 +41,17 @@ func (m *Manager) PullJobImage(jobName string) error {
 	return job.PullImage()
 }
 
+func (m *Manager) GetJob(name string) *Job {
+	for _, job := range m.Conf.Jobs {
+		if job.Name == name {
+			return job
+		}
+	}
+	return nil
+}
+
 func (m *Manager) RunJob(jobName string) error {
-	job := m.Conf.Jobs[jobName]
+	job := m.GetJob(jobName)
 
 	if job == nil {
 		return fmt.Errorf("job %s not found", jobName)
