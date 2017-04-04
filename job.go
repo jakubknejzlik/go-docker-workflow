@@ -8,13 +8,14 @@ import (
 )
 
 type Job struct {
-	Name      string          `yaml:"name"`
-	Image     string          `yaml:"image"`
-	Cron      string          `yaml:"cron"`
-	Steps     []string        `yaml:"steps"`
-	Env       []string        `yaml:"environment"`
-	Jobs      map[string]*Job `yaml:"jobs"`
-	ParentJob *Job
+	Name       string          `yaml:"name"`
+	Image      string          `yaml:"image"`
+	AlwaysPull bool            `yaml:"alwaysPull"`
+	Cron       string          `yaml:"cron"`
+	Steps      []string        `yaml:"steps"`
+	Env        []string        `yaml:"environment"`
+	Jobs       map[string]*Job `yaml:"jobs"`
+	ParentJob  *Job
 }
 
 func processJob(j *Job, name string) {
@@ -53,7 +54,9 @@ func (j *Job) PullImage() error {
 }
 
 func (j *Job) Run() {
-	j.PullImage()
+	if j.AlwaysPull {
+		j.PullImage()
+	}
 
 	log.Printf("Running job %s", j.GetFullname())
 
