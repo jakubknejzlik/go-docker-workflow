@@ -68,7 +68,7 @@ func (j *Job) Run() {
 	if j.Image != "" {
 		args := []string{"run", "--rm"}
 		// args = append(args, t.Arguments...)
-		for _, env := range j.Env {
+		for _, env := range j.GetFullEnv() {
 			args = append(args, "-e", env)
 		}
 		args = append(args, j.Image)
