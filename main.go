@@ -3,7 +3,12 @@ package main
 import "os"
 
 func main() {
-	man := NewManager(os.Getenv("CONFIG"))
+	config := os.Getenv("CONFIG")
+	if len(os.Args) > 1 {
+		config = os.Args[1]
+	}
+
+	man := NewManager(config)
 
 	man.Start()
 }
