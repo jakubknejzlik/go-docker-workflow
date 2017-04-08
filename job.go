@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 )
@@ -63,7 +62,7 @@ func (j *Job) Run() {
 		j.PullImage()
 	}
 
-	log.Printf("Running job %s", j.GetFullname())
+	fmt.Printf("Running job %s", j.GetFullname())
 
 	if j.Image != "" {
 		args := []string{"run", "--rm"}
@@ -78,7 +77,7 @@ func (j *Job) Run() {
 		cmd.Stderr = os.Stderr
 
 		if err := cmd.Run(); err != nil {
-			log.Fatal(err)
+			fmt.Println(err)
 		}
 	}
 

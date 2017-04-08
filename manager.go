@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/robfig/cron"
@@ -21,7 +20,7 @@ type Manager struct {
 func NewManager(config string) Manager {
 	var conf Config
 	if err := yaml.Unmarshal([]byte(config), &conf); err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 
 	for _, job := range conf.Jobs {
@@ -68,7 +67,7 @@ func (m *Manager) Start() error {
 		return err
 	}
 
-	log.Println("starting manager")
+	fmt.Println("starting manager")
 
 	for _, job := range m.Conf.Jobs {
 		if job.Cron == "" {
