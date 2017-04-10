@@ -80,6 +80,16 @@ func (m *Manager) Start() error {
 	}
 }
 
+func (m *Manager) Run() error {
+	fmt.Println("running jobs")
+
+	for _, job := range m.Conf.Jobs {
+		job.Run()
+	}
+
+	return nil
+}
+
 func (m *Manager) StartCrons() (*cron.Cron, error) {
 	c := cron.New()
 
