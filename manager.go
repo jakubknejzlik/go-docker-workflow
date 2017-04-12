@@ -95,7 +95,7 @@ func (m *Manager) StartCrons() (*cron.Cron, error) {
 
 	for _, job := range m.Conf.Jobs {
 		if job.Cron != "" {
-			fmt.Printf("Starting cron %s for job %s", job.Cron, job.GetFullname())
+			fmt.Printf("Starting cron %s for job %s\n", job.Cron, job.GetFullname())
 			c.AddJob(job.Cron, job)
 		}
 	}
