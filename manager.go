@@ -67,7 +67,7 @@ func (m *Manager) Start() error {
 		return err
 	}
 
-	fmt.Println("starting manager")
+	fmt.Println("starting cronjobs")
 
 	for _, job := range m.Conf.Jobs {
 		if job.Cron == "" {
@@ -95,6 +95,7 @@ func (m *Manager) StartCrons() (*cron.Cron, error) {
 
 	for _, job := range m.Conf.Jobs {
 		if job.Cron != "" {
+			fmt.Printf("Starting cron %s for job %s", job.Cron, job.GetFullname())
 			c.AddJob(job.Cron, job)
 		}
 	}
