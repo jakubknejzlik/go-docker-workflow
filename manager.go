@@ -1,12 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 
 	"github.com/robfig/cron"
-
-	yaml "gopkg.in/yaml.v2"
 )
 
 type Config struct {
@@ -19,7 +18,7 @@ type Manager struct {
 
 func NewManager(config string) Manager {
 	var conf Config
-	if err := yaml.Unmarshal([]byte(config), &conf); err != nil {
+	if err := json.Unmarshal([]byte(config), &conf); err != nil {
 		fmt.Println(err)
 	}
 

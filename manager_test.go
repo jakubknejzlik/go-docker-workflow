@@ -8,7 +8,7 @@ import (
 )
 
 func TestManager(t *testing.T) {
-	data, _ := ioutil.ReadFile("./test/jobs.yaml")
+	data, _ := ioutil.ReadFile("./test/jobs.json")
 
 	man := NewManager(string(data))
 	assert.Equal(t, nil, man.RunJob("test"), "run job should not fail")
