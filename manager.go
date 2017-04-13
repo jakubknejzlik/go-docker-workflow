@@ -20,6 +20,7 @@ func NewManager(config string) Manager {
 	var conf Config
 	if err := json.Unmarshal([]byte(config), &conf); err != nil {
 		fmt.Println(err)
+		fmt.Println(config)
 	}
 
 	for _, job := range conf.Jobs {
