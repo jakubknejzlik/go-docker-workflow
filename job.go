@@ -7,13 +7,13 @@ import (
 )
 
 type Job struct {
-	Name       string   `yaml:"name"`
-	Image      string   `yaml:"image"`
-	AlwaysPull bool     `yaml:"alwaysPull"`
-	Cron       string   `yaml:"cron"`
-	Steps      []string `yaml:"steps"`
-	Env        []string `yaml:"environment"`
-	Jobs       []*Job   `yaml:"jobs"`
+	Name       string   `json:"name"`
+	Image      string   `json:"image"`
+	AlwaysPull bool     `json:"alwaysPull"`
+	Cron       string   `json:"cron"`
+	Steps      []string `json:"steps"`
+	Env        []string `json:"environment"`
+	Jobs       []*Job   `json:"jobs"`
 	ParentJob  *Job
 }
 
