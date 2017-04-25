@@ -9,7 +9,7 @@ import (
 )
 
 type Config struct {
-	Jobs []*Job `yaml:"jobs"`
+	Jobs []*Job `json:"jobs"`
 }
 
 type Manager struct {
