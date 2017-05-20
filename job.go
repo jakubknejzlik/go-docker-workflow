@@ -62,7 +62,8 @@ func (j *Job) Run() {
 		j.PullImage()
 	}
 
-	fmt.Printf("Running job %s", j.GetFullname())
+	fmt.Printf("Running job %s \n ======================================\n", j.GetFullname())
+	fmt.Printf("Image:%s \nEnvs: %s \n ======================================\n", j.Image, j.Env)
 
 	if j.Image != "" {
 		args := []string{"run", "--rm"}
