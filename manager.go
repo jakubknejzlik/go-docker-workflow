@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"time"
@@ -18,7 +19,8 @@ type Manager struct {
 
 func NewManager(config string) Manager {
 	var conf Config
-	if err := json.Unmarshal([]byte(config), &conf); err != nil {
+	decodedConfig, _ := base64.StdEncoding.DecodeString(config)
+	if err := json.Unmarshal(decodedConfig, &conf); err != nil {
 		fmt.Println(err)
 		fmt.Println(config)
 	}
