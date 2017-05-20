@@ -79,7 +79,7 @@ func (j *Job) Run() {
 			args = append(args, fmt.Sprintf("-e %s=\"%s\"", key, value))
 		}
 		args = append(args, j.Image)
-		fmt.Printf("docker %s\n ================================ \n", args)
+		// fmt.Printf("docker %s\n ================================ \n", args)
 		cmd := exec.Command("docker", args...)
 
 		cmd.Stdout = os.Stdout
