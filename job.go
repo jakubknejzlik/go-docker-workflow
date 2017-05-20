@@ -7,13 +7,13 @@ import (
 )
 
 type Job struct {
-	Name       string   `json:"name"`
-	Image      string   `json:"image"`
-	AlwaysPull bool     `json:"alwaysPull"`
-	Cron       string   `json:"cron"`
-	Steps      []string `json:"steps"`
-	Env        []string `json:"environment"`
-	Jobs       []*Job   `json:"jobs"`
+	Name       string            `json:"name"`
+	Image      string            `json:"image"`
+	AlwaysPull bool              `json:"alwaysPull"`
+	Cron       string            `json:"cron"`
+	Steps      []string          `json:"steps"`
+	Env        map[string]string `json:"environment"`
+	Jobs       []*Job            `json:"jobs"`
 	ParentJob  *Job
 }
 
@@ -31,9 +31,13 @@ func (j *Job) GetFullname() string {
 	return j.Name
 }
 
-func (j *Job) GetFullEnv() []string {
+func (j *Job) GetFullEnv() map[string]string {
 	if j.ParentJob != nil {
-		return append(j.ParentJob.GetFullEnv(), j.Env...)
+		parentEnv := j.ParentJob.GetFullEnv()
+		for key, value := range j.Env {
+			parentEnv[key] = value
+		}
+		return parentEnv
 	}
 	return j.Env
 }
@@ -68,10 +72,11 @@ func (j *Job) Run() {
 	if j.Image != "" {
 		args := []string{"run", "--rm"}
 		// args = append(args, t.Arguments...)
-		for _, env := range j.GetFullEnv() {
-			args = append(args, "-e", env)
+		for key, value := range j.GetFullEnv() {
+			args = append(args, "-e %s=\"%s\"", key, value)
 		}
 		args = append(args, j.Image)
+		fmt.Printf("docker %s\n ================================ \n", args)
 		cmd := exec.Command("docker", args...)
 
 		cmd.Stdout = os.Stdout
