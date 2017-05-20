@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 type Job struct {
@@ -80,6 +81,7 @@ func (j *Job) Run() {
 		}
 		args = append(args, j.Image)
 		// fmt.Printf("docker %s\n ================================ \n", args)
+		fmt.Printf("docker %s \n ======================================\n", strings.Join(args, " "))
 		cmd := exec.Command("docker", args...)
 
 		cmd.Stdout = os.Stdout
