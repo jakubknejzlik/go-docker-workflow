@@ -13,7 +13,7 @@ func TestManager(t *testing.T) {
 
 	man := NewManager(base64.StdEncoding.EncodeToString(data))
 
-	assert.Equal(t, 1, len(man.Conf.Jobs), "should contain 1 job")
+	assert.Equal(t, 1, len(man.rootJob.Jobs), "should contain 1 job")
 	assert.Equal(t, nil, man.RunJob("test"), "run job should not fail")
 	assert.NotEqual(t, nil, man.RunJob("test2"), "run nonexisting job should fail")
 }

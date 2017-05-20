@@ -9,27 +9,21 @@ import (
 	"github.com/robfig/cron"
 )
 
-type Config struct {
-	Jobs []*Job `json:"jobs"`
-}
-
 type Manager struct {
-	Conf Config
+	rootJob Job
 }
 
 func NewManager(config string) Manager {
-	var conf Config
+	var rootJob Job
 	decodedConfig, _ := base64.StdEncoding.DecodeString(config)
-	if err := json.Unmarshal(decodedConfig, &conf); err != nil {
+	if err := json.Unmarshal(decodedConfig, &rootJob); err != nil {
 		fmt.Println(err)
 		fmt.Println(config)
 	}
 
-	for _, job := range conf.Jobs {
-		processJob(job)
-	}
+	processJob(&rootJob)
 
-	return Manager{conf}
+	return Manager{rootJob}
 }
 
 func (m *Manager) PullJobImage(jobName string) error {
@@ -43,7 +37,7 @@ func (m *Manager) PullJobImage(jobName string) error {
 }
 
 func (m *Manager) GetJob(name string) *Job {
-	for _, job := range m.Conf.Jobs {
+	for _, job := range m.rootJob.Jobs {
 		if job.Name == name {
 			return job
 		}
@@ -71,7 +65,7 @@ func (m *Manager) Start() error {
 
 	fmt.Println("starting cronjobs")
 
-	for _, job := range m.Conf.Jobs {
+	for _, job := range m.rootJob.Jobs {
 		if job.Cron == "" {
 			job.Run()
 		}
@@ -85,9 +79,7 @@ func (m *Manager) Start() error {
 func (m *Manager) Run() error {
 	fmt.Println("running jobs")
 
-	for _, job := range m.Conf.Jobs {
-		job.Run()
-	}
+	m.rootJob.Run()
 
 	return nil
 }
@@ -95,7 +87,7 @@ func (m *Manager) Run() error {
 func (m *Manager) StartCrons() (*cron.Cron, error) {
 	c := cron.New()
 
-	for _, job := range m.Conf.Jobs {
+	for _, job := range m.rootJob.Jobs {
 		if job.Cron != "" {
 			fmt.Printf("Starting cron %s for job %s\n", job.Cron, job.GetFullname())
 			c.AddJob(job.Cron, job)
