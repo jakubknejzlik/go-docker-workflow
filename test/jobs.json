@@ -2,23 +2,23 @@
   "jobs": [
     {
       "name": "test",
-      "environment": [
-        "XXX=yyy"
-      ],
+      "environment": {
+        "XXX": "yyy"
+      },
       "jobs": [
         {
           "name": "subtest1",
           "image": "hello-world",
-          "environment": [
-            "HELLO=world"
-          ]
+          "environment": {
+            "HELLO":"world"
+          }
         },
         {
           "name": "subtest2",
           "image": "hello-world",
-          "environment": [
-            "HELLO=world"
-          ]
+          "environment": {
+            "HELLO":"blah"
+          }
         }
       ]
     }

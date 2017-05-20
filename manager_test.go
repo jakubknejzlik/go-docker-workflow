@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"io/ioutil"
 	"testing"
 
@@ -10,9 +11,9 @@ import (
 func TestManager(t *testing.T) {
 	data, _ := ioutil.ReadFile("./test/jobs.json")
 
-	man := NewManager(string(data))
+	man := NewManager(base64.StdEncoding.EncodeToString(data))
 
-	assert.Equal(t, len(man.Conf.Jobs), 1, "should contain 1 job")
+	assert.Equal(t, 1, len(man.Conf.Jobs), "should contain 1 job")
 	assert.Equal(t, nil, man.RunJob("test"), "run job should not fail")
 	assert.NotEqual(t, nil, man.RunJob("test2"), "run nonexisting job should fail")
 }

@@ -33,11 +33,14 @@ func (j *Job) GetFullname() string {
 
 func (j *Job) GetFullEnv() map[string]string {
 	if j.ParentJob != nil {
-		parentEnv := j.ParentJob.GetFullEnv()
-		for key, value := range j.Env {
-			parentEnv[key] = value
+		env := map[string]string{}
+		for key, value := range j.ParentJob.GetFullEnv() {
+			env[key] = value
 		}
-		return parentEnv
+		for key, value := range j.Env {
+			env[key] = value
+		}
+		return env
 	}
 	return j.Env
 }
@@ -67,7 +70,7 @@ func (j *Job) Run() {
 	}
 
 	fmt.Printf("Running job %s \n ======================================\n", j.GetFullname())
-	fmt.Printf("Image:%s \nEnvs: %s \n ======================================\n", j.Image, j.Env)
+	fmt.Printf("Image:%s \nEnvs: %s \n ======================================\n", j.Image, j.GetFullEnv())
 
 	if j.Image != "" {
 		args := []string{"run", "--rm"}
