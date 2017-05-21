@@ -77,13 +77,13 @@ func (j *Job) Run() {
 		args := []string{"run", "--rm"}
 		// args = append(args, t.Arguments...)
 		for key, value := range j.GetFullEnv() {
-			args = append(args, fmt.Sprintf("-e %s='%s'", key, value))
+			args = append(args, "-e", fmt.Sprintf("%s=%s", key, value))
 		}
 		args = append(args, j.Image)
 		// fmt.Printf("docker %s\n ================================ \n", args)
 		fmt.Printf("docker %s \n ======================================\n", strings.Join(args, " "))
 		cmd := exec.Command("docker", args...)
-
+		fmt.Println(cmd)
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 
