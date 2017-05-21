@@ -23,11 +23,16 @@ func main() {
 			},
 		},
 		{
-			Name:      "run",
-			ArgsUsage: "[JOB_NAME]",
+			Name: "run",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "job,j",
+					Value: "",
+				},
+			},
 			Action: func(c *cli.Context) error {
 				man := NewManager(c.Args().First())
-				jobName := c.Args().Get(1)
+				jobName := c.String("job")
 				if jobName == "" {
 					man.Run()
 				} else {
