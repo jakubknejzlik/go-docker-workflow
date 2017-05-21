@@ -4,15 +4,18 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/robfig/cron"
 )
 
+// Manager ...
 type Manager struct {
 	rootJob Job
 }
 
+// NewManager ...
 func NewManager(config string) Manager {
 	var rootJob Job
 	decodedConfig, _ := base64.StdEncoding.DecodeString(config)
@@ -21,13 +24,16 @@ func NewManager(config string) Manager {
 		fmt.Println(config)
 	}
 
+	rootJob.IsRoot = true
+
 	processJob(&rootJob)
 
 	return Manager{rootJob}
 }
 
+// PullJobImage ...
 func (m *Manager) PullJobImage(jobName string) error {
-	job := m.GetJob(jobName)
+	job := m.FindJob(jobName)
 
 	if job == nil {
 		return fmt.Errorf("job %s not found", jobName)
@@ -36,17 +42,14 @@ func (m *Manager) PullJobImage(jobName string) error {
 	return job.PullImage()
 }
 
-func (m *Manager) GetJob(name string) *Job {
-	for _, job := range m.rootJob.Jobs {
-		if job.Name == name {
-			return job
-		}
-	}
-	return nil
+// FindJob ...
+func (m *Manager) FindJob(name string) *Job {
+	return m.rootJob.FindSubJob(strings.Split(name, "/"))
 }
 
+// RunJob ...
 func (m *Manager) RunJob(jobName string) error {
-	job := m.GetJob(jobName)
+	job := m.FindJob(jobName)
 
 	if job == nil {
 		return fmt.Errorf("job %s not found", jobName)
@@ -56,6 +59,7 @@ func (m *Manager) RunJob(jobName string) error {
 	return nil
 }
 
+// Start ...
 func (m *Manager) Start() error {
 	_, err := m.StartCrons()
 
@@ -76,6 +80,7 @@ func (m *Manager) Start() error {
 	}
 }
 
+// Run ...
 func (m *Manager) Run() error {
 	fmt.Println("running jobs")
 
@@ -84,6 +89,7 @@ func (m *Manager) Run() error {
 	return nil
 }
 
+// StartCrons ...
 func (m *Manager) StartCrons() (*cron.Cron, error) {
 	c := cron.New()
 

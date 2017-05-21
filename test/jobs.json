@@ -1,4 +1,5 @@
 {
+  "name": "RootJob",
   "jobs": [
     {
       "name": "test",
@@ -8,14 +9,30 @@
       "jobs": [
         {
           "name": "subtest1",
-          "image": "hello-world",
+          "image": "busybox",
           "environment": {
             "HELLO":"world"
-          }
+          },
+          "jobs": [
+            {
+              "name": "subsubtest1",
+              "image": "busybox",
+              "environment": {
+                "HELLO":"subworld"
+              }
+            },
+            {
+              "name": "subsubtest2",
+              "image": "busybox",
+              "environment": {
+                "HELLO":"subworld"
+              }
+            }
+          ]
         },
         {
           "name": "subtest2",
-          "image": "hello-world",
+          "image": "busybox",
           "environment": {
             "HELLO":"blah"
           }

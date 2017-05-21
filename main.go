@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/urfave/cli"
@@ -11,6 +10,7 @@ func main() {
 
 	app := cli.NewApp()
 	app.Name = "go docker workflow"
+	app.Version = "0.0.1"
 	app.Usage = "..."
 
 	app.Commands = []cli.Command{
@@ -23,17 +23,16 @@ func main() {
 			},
 		},
 		{
-			Name: "run",
+			Name:      "run",
+			ArgsUsage: "[JOB_NAME]",
 			Action: func(c *cli.Context) error {
 				man := NewManager(c.Args().First())
-				man.Run()
-				return nil
-			},
-		},
-		{
-			Name: "version",
-			Action: func(c *cli.Context) error {
-				fmt.Println("0.0.1")
+				jobName := c.Args().Get(1)
+				if jobName == "" {
+					man.Run()
+				} else {
+					man.RunJob(jobName)
+				}
 				return nil
 			},
 		},

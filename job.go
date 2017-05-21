@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"time"
 )
 
 type Job struct {
+	IsRoot     bool
 	Name       string            `json:"name"`
 	Image      string            `json:"image"`
 	AlwaysPull bool              `json:"alwaysPull"`
@@ -25,7 +27,7 @@ func processJob(j *Job) {
 }
 
 func (j *Job) GetFullname() string {
-	if j.ParentJob != nil {
+	if j.ParentJob != nil && !j.ParentJob.IsRoot {
 		return fmt.Sprintf("%s/%s", j.ParentJob.GetFullname(), j.Name)
 	}
 	return j.Name
@@ -43,6 +45,19 @@ func (j *Job) GetFullEnv() map[string]string {
 		return env
 	}
 	return j.Env
+}
+
+func (j *Job) FindSubJob(namespace []string) *Job {
+	name := namespace[0]
+	for _, job := range j.Jobs {
+		if job.Name == name {
+			if len(namespace) == 1 {
+				return job
+			}
+			return job.FindSubJob(namespace[1:])
+		}
+	}
+	return nil
 }
 
 func (j *Job) PullImage() error {
@@ -69,7 +84,8 @@ func (j *Job) Run() {
 		j.PullImage()
 	}
 
-	fmt.Printf("Running job %s \n ======================================\n", j.GetFullname())
+	fmt.Printf("Running job %s \n======================================\n", j.GetFullname())
+	start := time.Now()
 	// fmt.Printf("Image:%s \nEnvs: %s \n ======================================\n", j.Image, j.GetFullEnv())
 
 	if j.Image != "" {
@@ -94,4 +110,6 @@ func (j *Job) Run() {
 	for _, job := range j.Jobs {
 		job.Run()
 	}
+
+	fmt.Printf("-----------------------------------\nFinished running job %s (%s)\n======================================\n", j.GetFullname(), time.Since(start))
 }
