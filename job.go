@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"strings"
 )
 
 type Job struct {
@@ -71,7 +70,7 @@ func (j *Job) Run() {
 	}
 
 	fmt.Printf("Running job %s \n ======================================\n", j.GetFullname())
-	fmt.Printf("Image:%s \nEnvs: %s \n ======================================\n", j.Image, j.GetFullEnv())
+	// fmt.Printf("Image:%s \nEnvs: %s \n ======================================\n", j.Image, j.GetFullEnv())
 
 	if j.Image != "" {
 		args := []string{"run", "--rm"}
@@ -81,7 +80,7 @@ func (j *Job) Run() {
 		}
 		args = append(args, j.Image)
 		// fmt.Printf("docker %s\n ================================ \n", args)
-		fmt.Printf("docker %s \n ======================================\n", strings.Join(args, " "))
+		// fmt.Printf("docker %s \n ======================================\n", strings.Join(args, " "))
 		cmd := exec.Command("docker", args...)
 		fmt.Println(cmd)
 		cmd.Stdout = os.Stdout
