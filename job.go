@@ -82,7 +82,7 @@ func (j *Job) Run() {
 		// fmt.Printf("docker %s\n ================================ \n", args)
 		// fmt.Printf("docker %s \n ======================================\n", strings.Join(args, " "))
 		cmd := exec.Command("docker", args...)
-		fmt.Println(cmd)
+
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 
