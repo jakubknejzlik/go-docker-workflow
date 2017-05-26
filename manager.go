@@ -61,18 +61,11 @@ func (m *Manager) RunJob(jobName string) error {
 
 // Start ...
 func (m *Manager) Start() error {
-	_, err := m.StartCrons()
-
-	if err != nil {
-		return err
-	}
-
 	fmt.Println("starting cronjobs")
 
-	for _, job := range m.rootJob.Jobs {
-		if job.Cron == "" {
-			job.Run()
-		}
+	_, err := m.StartCrons()
+	if err != nil {
+		return err
 	}
 
 	for {
