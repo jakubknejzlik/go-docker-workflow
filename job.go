@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+// Job ...
 type Job struct {
 	IsRoot     bool
 	Name       string            `json:"name"`
@@ -26,6 +27,7 @@ func processJob(j *Job) {
 	}
 }
 
+// GetFullname ...
 func (j *Job) GetFullname() string {
 	if j.ParentJob != nil && !j.ParentJob.IsRoot {
 		return fmt.Sprintf("%s/%s", j.ParentJob.GetFullname(), j.Name)
@@ -33,6 +35,7 @@ func (j *Job) GetFullname() string {
 	return j.Name
 }
 
+// GetFullEnv ...
 func (j *Job) GetFullEnv() map[string]string {
 	if j.ParentJob != nil {
 		env := map[string]string{}
@@ -47,6 +50,7 @@ func (j *Job) GetFullEnv() map[string]string {
 	return j.Env
 }
 
+// FindSubJob ...
 func (j *Job) FindSubJob(namespace []string) *Job {
 	name := namespace[0]
 	for _, job := range j.Jobs {
@@ -60,6 +64,7 @@ func (j *Job) FindSubJob(namespace []string) *Job {
 	return nil
 }
 
+// PullImage ...
 func (j *Job) PullImage() error {
 
 	if j.Image == "" {
@@ -79,6 +84,7 @@ func (j *Job) PullImage() error {
 	return nil
 }
 
+// Run ...
 func (j *Job) Run() {
 	if j.AlwaysPull {
 		j.PullImage()
