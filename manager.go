@@ -93,14 +93,24 @@ func (m *Manager) Run() error {
 func (m *Manager) StartCrons() (*cron.Cron, error) {
 	c := cron.New()
 
-	for _, job := range m.rootJob.Jobs {
-		if job.Cron != "" {
-			fmt.Printf("Starting cron %s for job %s\n", job.Cron, job.GetFullname())
-			c.AddJob(job.Cron, job)
-		}
+	if err := m.startCronsJob(&m.rootJob, c); err != nil {
+		return c, err
 	}
 
 	c.Start()
 
 	return c, nil
+}
+
+func (m *Manager) startCronsJob(j *Job, c *cron.Cron) error {
+	if j.Cron != "" {
+		fmt.Printf("Starting cron %s for job %s\n", j.Cron, j.GetFullname())
+		c.AddJob(j.Cron, j)
+	}
+	for _, job := range j.Jobs {
+		if err := m.startCronsJob(job, c); err != nil {
+			return err
+		}
+	}
+	return nil
 }
