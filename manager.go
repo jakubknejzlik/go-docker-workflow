@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
@@ -84,7 +85,14 @@ func (m *Manager) Run() error {
 
 // StartCrons ...
 func (m *Manager) StartCrons() (*cron.Cron, error) {
-	c := cron.New()
+
+	timezone := os.Getenv("TIMEZONE")
+	if timezone == "" {
+		timezone = "UTC"
+	}
+	location, _ := time.LoadLocation(timezone)
+
+	c := cron.NewWithLocation(location)
 
 	if err := m.startCronsJob(&m.rootJob, c); err != nil {
 		return c, err
