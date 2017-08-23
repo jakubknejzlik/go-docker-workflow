@@ -86,8 +86,15 @@ func (j *Job) PullImage() error {
 
 // Run ...
 func (j *Job) Run() {
+	j.RunStrict()
+}
+
+// RunStrict ...
+func (j *Job) RunStrict() error {
 	if j.AlwaysPull {
-		j.PullImage()
+		if err := j.PullImage(); err != nil {
+			return err
+		}
 	}
 
 	fmt.Printf("Running job %s \n======================================\n", j.GetFullname())
@@ -109,13 +116,17 @@ func (j *Job) Run() {
 		cmd.Stderr = os.Stderr
 
 		if err := cmd.Run(); err != nil {
-			fmt.Println(err)
+			return err
 		}
 	}
 
 	for _, job := range j.Jobs {
-		job.Run()
+		if err := job.RunStrict(); err != nil {
+			fmt.Printf("Failed job %s: %s\n", j.GetFullname(), err.Error())
+			return err
+		}
 	}
 
 	fmt.Printf("-----------------------------------\nFinished running job %s (%s)\n======================================\n", j.GetFullname(), time.Since(start))
+	return nil
 }

@@ -18,7 +18,9 @@ func main() {
 			Name: "start",
 			Action: func(c *cli.Context) error {
 				man := NewManager(c.Args().First())
-				man.Start()
+				if err := man.Start(); err != nil {
+					return cli.NewExitError(err, 1)
+				}
 				return nil
 			},
 		},
@@ -34,9 +36,13 @@ func main() {
 				man := NewManager(c.Args().First())
 				jobName := c.String("job")
 				if jobName == "" {
-					man.Run()
+					if err := man.Run(); err != nil {
+						return cli.NewExitError(err, 1)
+					}
 				} else {
-					man.RunJob(jobName)
+					if err := man.RunJob(jobName); err != nil {
+						return cli.NewExitError(err, 1)
+					}
 				}
 				return nil
 			},

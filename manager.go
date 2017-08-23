@@ -56,8 +56,7 @@ func (m *Manager) RunJob(jobName string) error {
 		return fmt.Errorf("job %s not found", jobName)
 	}
 
-	job.Run()
-	return nil
+	return job.RunStrict()
 }
 
 // Start ...
