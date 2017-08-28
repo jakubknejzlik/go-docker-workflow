@@ -97,7 +97,7 @@ func (j *Job) RunStrict() error {
 		}
 	}
 
-	fmt.Printf("Running job %s \n======================================\n", j.GetFullname())
+	fmt.Printf("\n\nRunning job %s \n======================================\n", j.GetFullname())
 	start := time.Now()
 	// fmt.Printf("Image:%s \nEnvs: %s \n ======================================\n", j.Image, j.GetFullEnv())
 
