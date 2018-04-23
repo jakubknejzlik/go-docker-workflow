@@ -122,7 +122,7 @@ func (j *Job) RunStrict() error {
 
 	for _, job := range j.Jobs {
 		if err := job.RunStrict(); err != nil {
-			fmt.Printf("Failed job %s: %s\n", j.GetFullname(), err.Error())
+			fmt.Printf("Job `%s` returned error: %s\n", j.GetFullname(), err.Error())
 			return err
 		}
 	}
