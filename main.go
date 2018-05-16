@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io/ioutil"
 	"os"
 
 	"github.com/urfave/cli"
@@ -33,7 +34,18 @@ func main() {
 				},
 			},
 			Action: func(c *cli.Context) error {
-				man := NewManager(c.Args().First())
+
+				config := c.Args().First()
+
+				if config == "" {
+					data, err := ioutil.ReadFile("config.yml")
+					if err != nil {
+						return cli.NewExitError(err, 1)
+					}
+					config = string(data)
+				}
+
+				man := NewManager(config)
 				jobName := c.String("job")
 				if jobName == "" {
 					if err := man.Run(); err != nil {
