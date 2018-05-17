@@ -1,0 +1,23 @@
+name: RootJob
+jobs:
+- name: test
+  environment:
+    XXX: yyy
+  jobs:
+  - name: subtest1
+    image: busybox
+    environment:
+      HELLO: world
+    jobs:
+    - name: subsubtest1
+      image: busybox
+      environment:
+        HELLO: subworld
+    - name: subsubtest2
+      image: busybox
+      environment:
+        HELLO: subworld
+  - name: subtest2
+    image: busybox
+    environment:
+      HELLO: blah

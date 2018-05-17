@@ -1,17 +1,13 @@
 package main
 
 import (
-	"encoding/base64"
-	"io/ioutil"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestManager(t *testing.T) {
-	data, _ := ioutil.ReadFile("./test/jobs.json")
-
-	man := NewManager(base64.StdEncoding.EncodeToString(data))
+	man := NewManagerFromYamlFile("./test/jobs.yml")
 	assert.Equal(t, 1, len(man.rootJob.Jobs), "should contain 1 job")
 	assert.NotNil(t, man.FindJob("test"), "should find root job")
 	assert.NotNil(t, man.FindJob("test/subtest1"), "should find child job")

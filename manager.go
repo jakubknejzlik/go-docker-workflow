@@ -4,10 +4,12 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strings"
 	"time"
 
+	"github.com/ghodss/yaml"
 	"github.com/robfig/cron"
 )
 
@@ -16,13 +18,29 @@ type Manager struct {
 	rootJob Job
 }
 
-// NewManager ...
-func NewManager(config string) Manager {
+// NewManagerFromBase64 ...
+func NewManagerFromBase64(config string) Manager {
 	var rootJob Job
 	decodedConfig, _ := base64.StdEncoding.DecodeString(config)
 	if err := json.Unmarshal(decodedConfig, &rootJob); err != nil {
 		fmt.Println(err)
 		fmt.Println(config)
+	}
+
+	rootJob.IsRoot = true
+
+	processJob(&rootJob)
+
+	return Manager{rootJob}
+}
+
+// NewManagerFromYamlFile ...
+func NewManagerFromYamlFile(file string) Manager {
+	var rootJob Job
+	data, _ := ioutil.ReadFile(file)
+
+	if err := yaml.Unmarshal(data, &rootJob); err != nil {
+		fmt.Println(err)
 	}
 
 	rootJob.IsRoot = true
