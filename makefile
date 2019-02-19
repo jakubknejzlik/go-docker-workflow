@@ -1,5 +1,5 @@
-OWNER=graphql
-IMAGE_NAME=event-store-pump
+OWNER=jakubknejzlik
+IMAGE_NAME=go-docker-workflow
 QNAME=$(OWNER)/$(IMAGE_NAME)
 
 GIT_TAG=$(QNAME):$(TRAVIS_COMMIT)
@@ -34,7 +34,3 @@ build-local:
 deploy-local:
 	make build-local
 	mv $(IMAGE_NAME) /usr/local/bin/
-
-test:
-	EVENT_STORE_URL=http://localhost:8000/graphql NSQ_LOOKUP_URL=localhost:4161 go run *.go start --aggregator-url=http://localhost:8005
-	# DATABASE_URL="mysql://root:root@tcp(localhost:3306)/test?parseTime=true" go run *.go server -p 8000
