@@ -109,7 +109,7 @@ func (j *Job) RunStrict() error {
 		for key, value := range j.GetFullEnv() {
 			args = append(args, "-e", fmt.Sprintf("%s=%s", key, value))
 		}
-		args = append(args, "-v", "/etc/resolv.conf:/etc/resolv.conf:r")
+		args = append(args, "-v", "/etc/resolv.conf:/etc/resolv.conf")
 		args = append(args, j.Image)
 		// fmt.Printf("docker %s\n ================================ \n", args)
 		// fmt.Printf("docker %s \n ======================================\n", strings.Join(args, " "))
