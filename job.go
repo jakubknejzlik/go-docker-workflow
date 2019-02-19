@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 	"time"
 )
 
@@ -39,6 +40,10 @@ func (j *Job) GetFullname() string {
 func (j *Job) GetFullEnv() map[string]string {
 	if j.ParentJob != nil {
 		env := map[string]string{}
+		for _, value := range os.Environ() {
+			values := strings.Split(value, "=")
+			env[values[0]] = values[1]
+		}
 		for key, value := range j.ParentJob.GetFullEnv() {
 			env[key] = value
 		}
