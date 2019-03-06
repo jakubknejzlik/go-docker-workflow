@@ -20,5 +20,5 @@ RUN chmod +x /usr/local/bin/app
 # RUN curl -fsSL https://get.docker.com/ | sh
 
 
-ENTRYPOINT ["app"]
-CMD [ "start" ]
+ENTRYPOINT []
+CMD [ "app", "start" ]
