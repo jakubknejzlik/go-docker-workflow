@@ -16,7 +16,7 @@ ENV TIMEZONE UTC
 # https://serverfault.com/questions/772227/chmod-not-working-correctly-in-docker
 RUN chmod +x /usr/local/bin/app
 
-# RUN apk add --update curl
+RUN apk add --update tzdata
 # RUN curl -fsSL https://get.docker.com/ | sh
 
 
